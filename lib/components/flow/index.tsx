@@ -2,7 +2,7 @@
 
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useFlowStore } from "../stores/flow-store";
+import { useFlowStore } from "../../stores/flow-store";
 import { ColorChooserNode } from "./ColorChooserNode";
 
 const nodeTypes = {
@@ -14,7 +14,7 @@ export function Flow() {
     useFlowStore();
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: "100%", height: "100vh" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

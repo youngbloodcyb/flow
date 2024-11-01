@@ -1,10 +1,13 @@
-import { Handle, Position, NodeProps, useNodeId } from "@xyflow/react";
-import { useFlowStore } from "../stores/flow-store";
-
-interface NodeData {
-  label: string;
-  color: string;
-}
+import {
+  Handle,
+  Position,
+  NodeProps,
+  useNodeId,
+  useOnSelectionChange,
+  Node,
+} from "@xyflow/react";
+import { useFlowStore } from "../../stores/flow-store";
+import { useState, useCallback } from "react";
 
 interface NodeData {
   label: string;
@@ -12,9 +15,21 @@ interface NodeData {
 }
 
 export function ColorChooserNode({ data }: { data: NodeData }) {
+  const [isSelected, setIsSelected] = useState(false);
   const updateNodeColor = useFlowStore((state) => state.updateNodeColor);
   const addNodeBelow = useFlowStore((state) => state.addNodeBelow);
   const nodeId = useNodeId();
+
+  const onSelectionChange = useCallback(
+    ({ nodes }: { nodes: Node[] }) => {
+      setIsSelected(nodes.some((node) => node.id === nodeId));
+    },
+    [nodeId]
+  );
+
+  useOnSelectionChange({
+    onChange: onSelectionChange,
+  });
 
   if (!nodeId) return null;
 
@@ -26,6 +41,7 @@ export function ColorChooserNode({ data }: { data: NodeData }) {
         borderRadius: "5px",
         border: "1px solid black",
         position: "relative",
+        boxShadow: isSelected ? "0 0 0 2px #1a192b" : "none",
       }}
     >
       <Handle type="target" position={Position.Top} style={{ opacity: 0 }} />
